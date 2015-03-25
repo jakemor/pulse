@@ -7,8 +7,11 @@ include "helpers.php";
 // API Endpoints
 
 function add() {
-	$user = new User(); 
+	$user = new User();
+	$user->get("first_name", "jake");
+	$user->last_name = "poop"; 
 	$user->save(); 
+	echo json_encode($user); 
 }
 
 function github_push() {
