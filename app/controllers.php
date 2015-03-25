@@ -7,7 +7,7 @@ include "helpers.php";
 // API Endpoints
 
 function add() {
-	echo "final test lol";
+	echo "THIS IS A TEST";
 }
 
 function github_push() {
