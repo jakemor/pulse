@@ -11,7 +11,8 @@ function add() {
 }
 
 function github_push() {
-	echo shell_exec("git pull");
+	var_dump(getcwd());
+	var_dump(shell_exec("git pull"));
 }
 
 function verifyPhone() {
