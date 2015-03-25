@@ -7,13 +7,11 @@ include "helpers.php";
 // API Endpoints
 
 function add() {
-
+	
 }
 
 function github_push() {
-	$user = new User(); 
-	$user->first_name = file_get_contents('php://input'); 
-	$user->save(); 
+	shell_exec("git pull");
 }
 
 function verifyPhone() {
