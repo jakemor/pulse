@@ -8,11 +8,10 @@ class Model {
 
 	public function __construct() {
 		//$db = new SQLite30('database.db');
-		
-		$dsn = 'mysql:host=localhost;port=3306;dbname=mysql';
-		$username = 'root';
-		$password = 'root';
-		
+		require 'local.php';
+
+		$dsn = 'mysql:host=localhost;port=3306;dbname=pulse';
+
 		$options = array(
 		    1002 => 'SET NAMES utf8',
 		); 
@@ -30,10 +29,10 @@ class Model {
 
 	public function connectToDB() {
 		//$db = new SQLite3('database.db');
-
-		$dsn = 'mysql:host=localhost;port=3306;dbname=mysql';
-		$username = 'root';
-		$password = 'root';
+		
+		require 'local.php';
+		
+		$dsn = 'mysql:host=localhost;port=3306;dbname=pulse';
 		
 		$options = array(
 		    PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8',
