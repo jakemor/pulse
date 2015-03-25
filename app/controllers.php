@@ -7,11 +7,11 @@ include "helpers.php";
 // API Endpoints
 
 function add() {
-	echo "this is another test";
+	echo "final test";
 }
 
 function github_push() {
-	shell_exec("git pull");
+	echo shell_exec("git pull");
 }
 
 function verifyPhone() {
