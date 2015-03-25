@@ -11,7 +11,7 @@ class Model {
 		
 		$dsn = 'mysql:host=localhost;port=3306;dbname=mysql';
 		$username = 'root';
-		$password = 'loplop34';
+		$password = 'root';
 		
 		$options = array(
 		    1002 => 'SET NAMES utf8',
@@ -33,7 +33,7 @@ class Model {
 
 		$dsn = 'mysql:host=localhost;port=3306;dbname=mysql';
 		$username = 'root';
-		$password = 'loplop34';
+		$password = 'root';
 		
 		$options = array(
 		    PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8',
