@@ -9,7 +9,7 @@ class Model {
 	public function __construct() {
 		//$db = new SQLite30('database.db');
 		
-		$dsn = 'mysql:host=pulsedb.cyfneopdwxp8.us-west-2.rds.amazonaws.com;port=3306;dbname=pulse_database';
+		$dsn = 'mysql:host=localhost;port=3306;dbname=mysql';
 		$username = 'jakemor';
 		$password = 'loplop34';
 		
@@ -31,7 +31,7 @@ class Model {
 	public function connectToDB() {
 		//$db = new SQLite3('database.db');
 
-		$dsn = 'mysql:host=pulsedb.cyfneopdwxp8.us-west-2.rds.amazonaws.com;port=3306;dbname=pulse_database';
+		$dsn = 'mysql:host=localhost;port=3306;dbname=mysql';
 		$username = 'jakemor';
 		$password = 'loplop34';
 		
