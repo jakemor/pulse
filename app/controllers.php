@@ -7,7 +7,7 @@ include "helpers.php";
 // API Endpoints
 
 function add() {
-	echo "the server was updated";
+	echo "the server was updated again lol";
 }
 
 function github_push() {
