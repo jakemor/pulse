@@ -71,7 +71,7 @@ class Model {
 			$vals = "'" . implode("', '", $vals_array) . "'";
 
 			$db->exec(
-				'CREATE TABLE IF NOT EXISTS ' . $table_name . ' (' . $cols . ');'
+				'CREATE TABLE IF NOT EXISTS `' . $table_name . '` (' . $cols . ');'
 			);
 
 			$cols = implode(' , ', $cols_array);

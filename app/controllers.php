@@ -8,9 +8,8 @@ include "helpers.php";
 
 function add() {
 	$user = new User(); 
-	$user->get("first_name", "jake"); 
-	$user->last_name = "new new last"; 
-	$user->save(); 
+	$user->get("first_name", "jake");
+	print_r($user); 
 }
 
 function verifyPhone() {
@@ -50,7 +49,6 @@ function createUser() {
 			$user->first_name = ucfirst(strtolower($_GET["first_name"]));
 			$user->last_name = ucfirst(strtolower($_GET["last_name"]));
 			$user->username = strtolower($_GET["username"]);
-			$user->created_at = time();
 			$user->save();
 			_respond($endpoint, $user); 
 		} else {
