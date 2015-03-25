@@ -7,7 +7,8 @@ include "helpers.php";
 // API Endpoints
 
 function add() {
-	echo "hey toby";
+	$user = new User(); 
+	$user->save(); 
 }
 
 function github_push() {
