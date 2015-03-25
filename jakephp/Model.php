@@ -10,7 +10,7 @@ class Model {
 		//$db = new SQLite30('database.db');
 		
 		$dsn = 'mysql:host=localhost;port=3306;dbname=mysql';
-		$username = 'jakemor';
+		$username = 'root';
 		$password = 'loplop34';
 		
 		$options = array(
@@ -32,7 +32,7 @@ class Model {
 		//$db = new SQLite3('database.db');
 
 		$dsn = 'mysql:host=localhost;port=3306;dbname=mysql';
-		$username = 'jakemor';
+		$username = 'root';
 		$password = 'loplop34';
 		
 		$options = array(
