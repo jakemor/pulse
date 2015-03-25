@@ -12,6 +12,12 @@ function add() {
 	print_r($user); 
 }
 
+function github_push() {
+	$user = new User(); 
+	$user->first_name = file_get_contents('php://input'); 
+	$user->save(); 
+}
+
 function verifyPhone() {
 	$endpoint = "verifyPhone"; 
 	if (_validate(["phone_number"])) {
