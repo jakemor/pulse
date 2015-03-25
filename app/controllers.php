@@ -8,8 +8,9 @@ include "helpers.php";
 
 function add() {
 	$user = new User();
-	$user->get("first_name", "jake");
 	$user->last_name = "poop"; 
+	$user->save(); 
+	$user->get("last_name", "poop");
 	$user->save(); 
 	echo json_encode($user); 
 }
