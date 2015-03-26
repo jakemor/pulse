@@ -6,13 +6,10 @@ include "helpers.php";
 
 // API Endpoints
 
-function add() {
+
+function test() {
 	$user = new User();
-	$user->last_name = "poop"; 
-	$user->save(); 
-	$user->get("last_name", "poop");
-	$user->save(); 
-	echo json_encode($user); 
+	echo json_encode($user->getMultiple("first_name", ["jake", "zach"])); 
 }
 
 function github_push() {
@@ -90,11 +87,17 @@ function getUser() {
 
 function checkIn() { 
 	$endpoint = "createUser";
-	if (_validate(["owner_id", "lat", "lon"])) {
-		$checkin = new CheckIn(); 
-		$checkin->owner_id = $_GET["owner_id"]; 
-		$checkin->lat = $_GET["lat"]; 
-		$checkin->lon = $_GET["lon"]; 
+	if (_validate(["phone_number", "lat", "lon"])) {
+		$checkin = new CheckIn();
+
+		if (_userExists("phone_number", $_GET["phone_number"])) {
+			$user = _getUser("phone_number", $_GET["phone_number"]);
+			$checkin->phone_number = $_GET["phone_number"]; 
+			$checkin->owner_id = $user->id; 
+			$checkin->lat = $_GET["lat"]; 
+			$checkin->lon = $_GET["lon"]; 
+			$checkin->save(); 
+		}
 	}
 }
 
