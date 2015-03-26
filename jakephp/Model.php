@@ -104,8 +104,21 @@ class Model {
 		}
 	}
 
+	public function tableExists() {
+		$db = $this->connectToDB();
+		$table_name = get_class($this);
+		$result = $db->query("SHOW TABLES LIKE '{$table_name}'");
+		$rows = $result->fetchAll(PDO::FETCH_ASSOC);
+		return sizeof($rows) > 0;
+	}
+
 	// get(key, value)
 	public function get($key, $value) { ///
+
+		if (!$this->tableExists()) {
+			return FALSE; 
+		}
+
 		$db = $this->connectToDB();
 		$table_name = get_class($this);
 
@@ -128,69 +141,92 @@ class Model {
 
 	// returns an array
 	public function search($key, $value) {
+
+		if (!$this->tableExists()) {
+			return FALSE; 
+		}
+
 		$db = $this->connectToDB();
 		$table_name = get_class($this);
 
-		$query = "SELECT * FROM \"" . $table_name . "\" WHERE \"" . $key . "\" = '" . $value . "'";
+		$query = "SELECT * FROM `" . $table_name . "` WHERE `" . $key . "` = '" . $value . "'";
 
 		$result = $db->query($query);
 		$return = array();
 
-		while ($row = $result->fetchArray(PDO::FETCH_ASSOC)) {
-		    $db_row = array(); 
+		$rows = $result->fetchAll(PDO::FETCH_ASSOC);
+		$return = [];
+
+		foreach ($rows as $row) {
+		    $db_row = [];
 		    foreach ($row as $key => $value) {
 		    	$db_row[$key] = $value; 
 		    }
 		    array_push($return, $db_row); 
-		}
+		}	    
 
 		return $return; 
 	}
 
 	// returns an array
 	public function getAll() {
+
+		if (!$this->tableExists()) {
+			return FALSE; 
+		}
+
 		$db = $this->connectToDB();
 		$table_name = get_class($this);
 
-		$query = "SELECT * FROM \"" . $table_name . "\"";
+		$query = "SELECT * FROM `" . $table_name . "`";
 
 		$result = $db->query($query);
 		$return = array();
 
-		while ($row = $result->fetchArray(PDO::FETCH_ASSOC)) {
-		    $db_row = array(); 
+		$rows = $result->fetchAll(PDO::FETCH_ASSOC);
+
+	    foreach ($rows as $row) {
+	    	$db_row = []; 
 		    foreach ($row as $key => $value) {
 		    	$db_row[$key] = $value; 
 		    }
 		    array_push($return, $db_row); 
-		}
+	    }	    
 
 		return $return; 
 	}
 
 	// returns an array
 	public function match($array) {
+
+		if (!$this->tableExists()) {
+			return FALSE; 
+		}
+
 		$db = $this->connectToDB();
 		$table_name = get_class($this);
 
 		$query_array = array();  
 
 		foreach ($array as $key => $value) {
-			array_push($query_array,  "\"" . $key . "\" = '" . $value . "'"); 
+			array_push($query_array,  "`" . $key . "` = '" . $value . "'"); 
 		}
 
-		$query = "SELECT * FROM \"" . $table_name . "\" WHERE " . implode(" AND ", $query_array);
+		$query = "SELECT * FROM `" . $table_name . "` WHERE " . implode(" AND ", $query_array);
 
 		$result = $db->query($query);
 		$return = array();
 
-		while ($row = $result->fetchArray(PDO::FETCH_ASSOC)) {
+		$rows = $result->fetchAll(PDO::FETCH_ASSOC);
+		  
+		foreach ($rows as $row) {
 		    $db_row = array(); 
 		    foreach ($row as $key => $value) {
 		    	$db_row[$key] = $value; 
 		    }
-		    array_push($return, $db_row); 
-		}
+		    array_push($return, $db_row);
+		}  
+		
 
 		return $return; 
 	}
@@ -198,21 +234,29 @@ class Model {
 
 	// returns an array
 	public function getMultiple($key, $values) {
+
+		if (!$this->tableExists()) {
+			return FALSE; 
+		}
+
 		$db = $this->connectToDB();
 		$table_name = get_class($this);
 
 		$query_array = array();  
 
 		foreach ($values as $value) {
-			array_push($query_array,  "\"" . $key . "\" = '" . $value . "'"); 
+			array_push($query_array,  "`" . $key . "` = '" . $value . "'"); 
 		}
 
-		$query = "SELECT * FROM \"" . $table_name . "\" WHERE " . implode(" OR ", $query_array);
+		$query = "SELECT * FROM `" . $table_name . "` WHERE " . implode(" OR ", $query_array);
 
 		$result = $db->query($query);
+		
 		$return = array();
 
-		while ($row = $result->fetchArray(PDO::FETCH_ASSOC)) {
+		$rows = $result->fetchAll(PDO::FETCH_ASSOC);
+		   
+		foreach ($rows as $row) {
 		    $db_row = array(); 
 		    foreach ($row as $key => $value) {
 		    	$db_row[$key] = $value; 
@@ -225,6 +269,11 @@ class Model {
 
 	// delete()
 	public function delete() {
+
+		if (!$this->tableExists()) {
+			return FALSE; 
+		}
+
 		if (property_exists($this, "id")) {
 			$db = $this->connectToDB();
 			$table_name = get_class($this);

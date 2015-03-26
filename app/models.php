@@ -66,6 +66,7 @@ class Pulse extends Model {
 }
 
 class CheckIn extends Model { 
+	public $phone_number; 
 	public $owner_id; 
 	public $lat; 
 	public $lon; 
