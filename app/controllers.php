@@ -236,7 +236,7 @@ function uploadAddressBook() {
 		if (isset($post)) {
 			if (_userExists("id", $_GET["user_id"])) {
 				$address_book = json_decode($post);
-				
+
 				if (is_null($address_book)) {
 					_respondWithError($endpoint, "error parsing json"); 
 					return; 
@@ -269,6 +269,8 @@ function uploadAddressBook() {
 			} else {
 				_respondWithError($endpoint, "A user with that ID doesn't exists."); 
 			}
+		} else {
+			_respondWithError($endpoint, "No post data.");
 		}
 	}
 }
