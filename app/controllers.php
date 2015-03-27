@@ -241,7 +241,7 @@ function uploadAddressBook() {
 
 	$post = file_get_contents('php://input');
 
-	echo $post;
+	echo json_encode($post);
 
 	// if (_validate(["user_id"])) {
 	// 	if (isset($post)) {
