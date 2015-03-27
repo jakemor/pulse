@@ -241,6 +241,8 @@ function uploadAddressBook() {
 
 	$post = file_get_contents('php://input');
 
+	$post = preg_replace("/[^A-Za-z0-9 ]/", "", $post); 
+
 	if (_validate(["user_id"])) {
 		if (isset($post)) {
 			if (_userExists("id", $_GET["user_id"])) {
