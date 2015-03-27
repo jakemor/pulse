@@ -241,8 +241,6 @@ function uploadAddressBook() {
 
 	$post = file_get_contents('php://input');
 
-	$post = preg_replace("/[^A-Za-z0-9 ]/", "", $post); 
-
 	if (_validate(["user_id"])) {
 		if (isset($post)) {
 			if (_userExists("id", $_GET["user_id"])) {
@@ -257,15 +255,14 @@ function uploadAddressBook() {
 
 				for ($i=0; $i < sizeof($address_book); $i++) { 
 					$creds = $address_book[$i];
-					$phone = preg_replace("/[^0-9,.]/", "", $creds[0]);
-					$phone = substr($phone, -10);
-					
+					$phone = preg_replace("/[^0-9]/", "", $creds[0]);
+					$phone = substr($phone, -10); 
 					if (!_contactExists($phone)) {
 						$contact = new Contact(); 
 						$contact->owner_id = $_GET["user_id"];
 						$contact->phone_number = $phone; 
-						$contact->first_name = strtolower($creds[1]);  
-						$contact->last_name = strtolower($creds[2]);
+						$contact->first_name = preg_replace("/[^A-Za-z0-9 ]/", "", strtolower($creds[1]));  
+						$contact->last_name = preg_replace("/[^A-Za-z0-9 ]/", "", strtolower($creds[2]));;
 						$contact->save();
 					}
 
