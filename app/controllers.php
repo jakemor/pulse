@@ -232,6 +232,7 @@ function getFriends() {
 			}
 		}
 
+		$friend_phone_numbers = array_values($friend_phone_numbers);
 		var_dump($friend_phone_numbers);
 
 		for ($i=0; $i < sizeof($friend_phone_numbers); $i++) { 
