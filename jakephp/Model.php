@@ -76,7 +76,7 @@ class Model {
 			$cols = implode(' , ', $cols_array);
 
 			$db->exec(
-				"INSERT INTO " . $table_name . " (" . $cols . ") VALUES (" . $vals . ")"
+				"INSERT INTO `" . $table_name . "` (`" . $cols . "`) VALUES (" . $vals . ")"
 	  		);
  
 
