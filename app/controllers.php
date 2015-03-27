@@ -233,47 +233,49 @@ function uploadAddressBook() {
 
 	$post = file_get_contents('php://input');
 
-	if (_validate(["user_id"])) {
-		if (isset($post)) {
-			if (_userExists("id", $_GET["user_id"])) {
-				$address_book = json_decode($post);
+	echo $post;
 
-				if (is_null($address_book)) {
-					_respondWithError($endpoint, "error parsing json"); 
-					return; 
-				} 
+	// if (_validate(["user_id"])) {
+	// 	if (isset($post)) {
+	// 		if (_userExists("id", $_GET["user_id"])) {
+	// 			$address_book = json_decode($post);
 
-				$friends = []; 
+	// 			if (is_null($address_book)) {
+	// 				_respondWithError($endpoint, "error parsing json"); 
+	// 				return; 
+	// 			} 
 
-				for ($i=0; $i < sizeof($address_book); $i++) { 
-					$creds = $address_book[$i];
-					$phone = preg_replace("/[^0-9,.]/", "", $creds[0]);
-					$phone = substr($phone, -10);
+	// 			$friends = []; 
+
+	// 			for ($i=0; $i < sizeof($address_book); $i++) { 
+	// 				$creds = $address_book[$i];
+	// 				$phone = preg_replace("/[^0-9,.]/", "", $creds[0]);
+	// 				$phone = substr($phone, -10);
 					
-					if (!_contactExists($phone)) {
-						$contact = new Contact(); 
-						$contact->owner_id = $_GET["user_id"];
-						$contact->phone_number = $phone; 
-						$contact->first_name = strtolower($creds[1]);  
-						$contact->last_name = strtolower($creds[2]);
-						$contact->save();
-					}
+	// 				if (!_contactExists($phone)) {
+	// 					$contact = new Contact(); 
+	// 					$contact->owner_id = $_GET["user_id"];
+	// 					$contact->phone_number = $phone; 
+	// 					$contact->first_name = strtolower($creds[1]);  
+	// 					$contact->last_name = strtolower($creds[2]);
+	// 					$contact->save();
+	// 				}
 
-					if (_userExists("phone_number", $phone)) {
-						$user = new User(); 
-						$user->get("phone_number", $phone);
-						array_push($friends, $user); 
-					}
+	// 				if (_userExists("phone_number", $phone)) {
+	// 					$user = new User(); 
+	// 					$user->get("phone_number", $phone);
+	// 					array_push($friends, $user); 
+	// 				}
 
-				}
-				_respond($endpoint, $friends); 
-			} else {
-				_respondWithError($endpoint, "A user with that ID doesn't exists."); 
-			}
-		} else {
-			_respondWithError($endpoint, "No post data.");
-		}
-	}
+	// 			}
+	// 			_respond($endpoint, $friends); 
+	// 		} else {
+	// 			_respondWithError($endpoint, "A user with that ID doesn't exists."); 
+	// 		}
+	// 	} else {
+	// 		_respondWithError($endpoint, "No post data.");
+	// 	}
+	// }
 }
 
 function getFriends2() {
