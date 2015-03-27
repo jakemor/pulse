@@ -258,6 +258,7 @@ function uploadAddressBook() {
 					$phone = preg_replace("/[^0-9]/", "", $creds[0]);
 					$phone = substr($phone, -10); 
 					if (!_contactExists($phone)) {
+						echo $phone . "\n";
 						$contact = new Contact(); 
 						$contact->owner_id = $_GET["user_id"];
 						$contact->phone_number = $phone; 
