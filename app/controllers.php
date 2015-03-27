@@ -261,7 +261,7 @@ function uploadAddressBook() {
 						echo $phone . "\n";
 						$contact = new Contact(); 
 						$contact->owner_id = $_GET["user_id"];
-						$contact->phone_number = $phone; 
+						$contact->phone_number = "" . $phone; 
 						// $contact->first_name = preg_replace("/[^A-Za-z0-9 ]/", "", strtolower($creds[1]));  
 						// $contact->last_name = preg_replace("/[^A-Za-z0-9 ]/", "", strtolower($creds[2]));;
 						$contact->save();
