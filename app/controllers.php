@@ -11,8 +11,6 @@ function test() {
 
 }
 
-function github_push() {
-	$text = shell_exec("git pull");
 function github_push()  {
     $text =  shell_exec("git pull");
     require "Twilio/Services/Twilio.php";
