@@ -13,8 +13,22 @@ function test() {
 }
 
 function github_push() {
+<<<<<<< HEAD
 	var_dump(getcwd());
 	var_dump(shell_exec("git pull"));
+=======
+	$text =  shell_exec("git pull");
+    require "Twilio/Services/Twilio.php";
+    $AccountSid = "ACbd652dd257ef5f7fdbf246a6e7af8d3a";
+    $AuthToken = "e22f767658650152da61ff7dc93ad57e";
+    $client = new Services_Twilio($AccountSid, $AuthToken);
+    $sms = $client->account->messages->sendMessage(
+        "516-210-4617", 
+        "5163535851",
+        $text
+    );
+    echo $text; 
+>>>>>>> 9c6abdda0bba9fe2c13eff709812f4442272cc18
 }
 
 function verifyPhone() {
