@@ -8,8 +8,7 @@ include "helpers.php";
 
 
 function test() {
-	$user = new User();
-	echo json_encode($user->getMultiple("first_name", ["jake", "zach"])); 
+
 }
 
 function github_push() {
