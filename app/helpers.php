@@ -22,8 +22,13 @@ function _pulseUser($owner_id, $other_phone_number, $message, $lat, $lon) {
 		_newNotification($owner_id, $other_id, 2, "You pulsed {$other_username}."); 
 		_newNotification($other_id, $owner_id, 1, "{$owner_username} sent you a pulse!");
 	} else {
-		_textPhoneNumber($other_phone_number, "Your friend {$owner_username} sent you a pulse! Download the app to pulse him back. getpulse.com"); 
-		_newNotification($owner_id, $other_phone_number, 2, "You pulsed {$other_phone_number}."); 
+		$texted = _textPhoneNumber($other_phone_number, "Your friend {$owner_username} sent you a pulse! Download the app to pulse him back. getpulse.com"); 
+		
+		if ($texted) {
+			_newNotification($owner_id, $other_phone_number, 2, "You pulsed {$other_phone_number}."); 
+		} else {
+			_newNotification($owner_id, $other_phone_number, 2, "{$other_phone_number} is not a valid phone number.");
+		}
 	}
 
 	$pulse->save();
@@ -75,11 +80,16 @@ function _textPhoneNumber($phone_number, $message) {
     $AccountSid = "ACbd652dd257ef5f7fdbf246a6e7af8d3a";
     $AuthToken = "e22f767658650152da61ff7dc93ad57e";
     $client = new Services_Twilio($AccountSid, $AuthToken);
-    $sms = $client->account->messages->sendMessage(
-        "516-210-4617", 
-        $phone_number,
-        $message
-    );
+	try {
+	    $sms = $client->account->messages->sendMessage(
+	        "516-210-4617", 
+	        $phone_number,
+	        $message
+	    );
+	    return TRUE; 
+	} catch (Exception $e) {
+   		return FALSE; 
+	}
 }
 
 function _getUserId($id, $value) {

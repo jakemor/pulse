@@ -111,61 +111,70 @@ function checkIn() {
 	}
 }
 
-function requestFriend() {
-	$endpoint = "createUser"; 
-	if (_validate(["friender_id", "friendee_id"])) {
-		if (_userExists("id", $_GET["friendee_id"]) && _userExists("id", $_GET["friender_id"])) {
+function addFriend() {
 
-			if ($_GET["friendee_id"] == $_GET["friender_id"]) {
+	$endpoint = "requestFriend"; 
+	if (_validate(["owner_id", "friend_phone_number"])) {
+
+		$phone = preg_replace("/[^0-9]/", "", $_GET["friend_phone_number"]);
+		$phone = substr($phone, -10);
+		$_GET["friend_phone_number"] = $phone; 
+
+		if (strlen($phone) != 10) {
+			_respondWithError($endpoint, "In order to friend this person, we need a full 10-digit phone number. Update their contact info in the phone app and try again.");
+			return; 
+		}
+
+		if (_userExists("id", $_GET["owner_id"])) {
+
+			$user = _getUser("id", $_GET["owner_id"]);
+
+			if ($_GET["friend_phone_number"] == $user->phone_number) {
 				_respondWithError($endpoint, "You can't friend yourself!");
 				return; 
 			}
 
 			$friend = new Friend(); 
-			$other_friended = $friend->match(["friender_id" => $_GET["friendee_id"], "friendee_id" => $_GET["friender_id"]]);
-			$friended_before = $friend->match(["friender_id" => $_GET["friender_id"], "friendee_id" => $_GET["friendee_id"]]);
+			$friended_before = $friend->match(["owner_id" => $_GET["owner_id"], "friend_phone_number" => $_GET["friend_phone_number"]]);
 
-			// nobody friended anyone
-			if (sizeof($other_friended) == 0 && sizeof($friended_before) == 0) {
-				$friend->friender_id = $_GET["friender_id"];
-				$friend->friendee_id = $_GET["friendee_id"];
-				$friend->accepted_at = 0; 
-				$friend->save(); 
-				_respondWithMessage($friend, "Your request was sent!"); 
-			}
+			if (sizeof($friended_before) > 0) {
+				_respondWithError($endpoint, "You two are already friends.");
+				return; 
+			} else {
+				$friend->owner_id = $_GET["owner_id"]; 
+				$friend->friend_phone_number = $_GET["friend_phone_number"];
+				$friend->save();
 
-			// friender friended before
-			if (sizeof($other_friended) == 0 && sizeof($friended_before) == 1) {
-				_respondWithError($endpoint, "You already friended that person!");
-			}
+				$username = $user->username; 
 
-			// friendee friended before 
-			if (sizeof($other_friended) == 1 && sizeof($friended_before) == 0) {
-				$id = $other_friended[0]["id"];
-				$friend->get("id", $id);
-				if ($friend->accepted_at == 0) {
-					$friend->accepted_at = time(); 
-					$friend->save();
-					_respondWithMessage($friend, "You two are now friends!");   
+				if (!_userExists("phone_number", $_GET["friend_phone_number"])) {
+					$phone = $_GET["friend_phone_number"]; 
+					$texted = _textPhoneNumber($phone, "{$username} added you on Pulse! Download it here to pulse them back. getpulse.com");
+					if ($texted) {
+						_newNotification($user->id, $_GET["friend_phone_number"], 3, "You added {$phone}!");
+						_respondWithMessage($endpoint, $friend, "You added {$phone}!");
+					} else {
+						_newNotification($user->id, $_GET["friend_phone_number"], 3, "{$phone} is not a valid phone number!");
+						_respondWithMessage($endpoint, $friend, "{$phone} is not a valid phone number!");
+					}
 				} else {
-					_respondWithError($endpoint, "You two are already friends!");
+					$the_friend = _getUser("phone_number", $_GET["friend_phone_number"]);
+					_newNotification($the_friend->id, $user->phone_number, 4, "{$username} added you!");
+					_newNotification($user->id, $the_friend->phone_number, 3, "You added {$the_friend->username}!");
+					_respondWithMessage($endpoint, $friend, "You added {$the_friend->username}!");
 				}
-			}
 
-			// already friends
-			if (sizeof($other_friended) == 1 && sizeof($friended_before) == 1) {
-				_respondWithError($endpoint, "You two are already friends!");
-			}
-		} elseif(_userExists("id", $_GET["friendee_id"])) {
-			_respondWithError($endpoint, "Friender_id {$_GET["friender_id"]} is not a valid user_id.");
+				
+			 }
+
 		} else {
-			_respondWithError($endpoint, "Friendee_id {$_GET["friendee_id"]} is not a valid user_id.");
-		}
+			_respondWithError($endpoint, "Invalid owner_id.");
+		} 
 	}
 }
 
 function getFriends() {
-	$endpoint = "createUser";
+	$endpoint = "getFriends";
 	if (_validateWithoutError(["user_id"]) or _validateWithoutError(["phone_number"])) {
 		$user = new User(); 
 		
@@ -181,44 +190,56 @@ function getFriends() {
 		}
 
 		$user_id = $user->id; 
+		
 		$friend = new Friend(); 
 
-		$friends1 = $friend->search("friender_id",$user_id);
-		$friends2 = $friend->search("friendee_id",$user_id);
+		$friendships = $friend->search("owner_id",$user_id);
 
-		if (sizeof($friends1) == 0 && sizeof($friends2) == 0) {
+		if (sizeof($friendships) == 0) {
 			_respond($endpoint, []); 
 			return; 
 		}
 
-		$friendships = array_merge($friends1, $friends2);
-		$friend_ids = [];
+		$friend_phone_numbers = [];
 		$friends_since = []; 
 
 		foreach ($friendships as $friendship) {
-			if ($friendship["friender_id"] != $user_id) {
-				$friend_id = $friendship["friender_id"]; 
-			} else {
-				$friend_id = $friendship["friendee_id"]; 
-			}
-			$friends_since[$friend_id] = $friendship["accepted_at"]; 
-			array_push($friend_ids, $friend_id);
+			$friends_since[$friendship["friend_phone_number"]] = $friendship["created_at"]; 
+			array_push($friend_phone_numbers, $friendship["friend_phone_number"]);
 		}
 
-		$friend_ids = array_unique($friend_ids); 
+		$friend_phone_numbers = array_unique($friend_phone_numbers); 
 
-		$results = $user->getMultiple("id", $friend_ids);
+		$results = $user->getMultiple("phone_number", $friend_phone_numbers);
 		$respond = []; 
 
 		for ($i=0; $i < sizeof($results); $i++) { 
 			$friend = []; 
 			$friend["user_id"] = $results[$i]["id"]; 
+			$friend["verified_account"] = TRUE; 
 			$friend["display_name"] = $results[$i]["first_name"] . " " . $results[$i]["last_name"]; 
 			$friend["username"] = $results[$i]["username"]; 
 			$friend["phone_number"] = $results[$i]["phone_number"];
-			$friend["accepted_at"] = $friends_since[$friend["user_id"]];
-			array_push($respond, $friend); 
+			$friend["friends_since"] = $friends_since[$friend["phone_number"]];
+			array_push($respond, $friend);
+			
+			$found = array_search($friend["phone_number"], $friend_phone_numbers);
+
+			if ($found === FALSE) {
+				break;
+			} else {
+				unset($friend_phone_numbers[$found]);
+			}
 		}
+
+		for ($i=0; $i < sizeof($friend_phone_numbers); $i++) { 
+			$friend = [];
+			$friend["verified_account"] = FALSE; 
+			$friend["phone_number"] = $friend_phone_numbers[$i];
+			$friend["friends_since"] = $friends_since[$friend_phone_numbers[$i]];
+			array_push($respond, $friend);
+		}
+
 		_respond($endpoint, $respond); 
 	} else {
 		_respondWithError($endpoint, "Missing either user_id or phone_number");
@@ -287,7 +308,7 @@ function uploadAddressBook() {
 				}
 				_respond($endpoint, $friends); 
 			} else {
-				_respondWithError($endpoint, "A user with that ID doesn't exists."); 
+				_respondWithError($endpoint, "A user with that ID does not exists."); 
 			}
 		} else {
 			_respondWithError($endpoint, "No post data.");
@@ -324,7 +345,7 @@ function getFriends2() {
 
 				_respond($endpoint, $friends); 
 			} else {
-				_respondWithError($endpoint, "A user with that ID doesn't exists."); 
+				_respondWithError($endpoint, "A user with that ID does not exists."); 
 			}
 		}
 	}

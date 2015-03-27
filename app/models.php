@@ -24,8 +24,8 @@ class User extends Model {
 }
 
 class Friend extends Model {
-	public $friender_id;
-	public $friendee_id;
+	public $owner_id;
+	public $friend_phone_number;
 	public $accepted_at; 
 	public $misc_0;
 	public $misc_1;

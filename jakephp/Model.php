@@ -74,7 +74,7 @@ class Model {
 			);
 
 			$cols = implode(' , ', $cols_array);
-			
+
 			$db->exec(
 				"INSERT INTO `" . $table_name . "` (" . $cols . ") VALUES (" . $vals . ")"
 	  		);
@@ -200,7 +200,7 @@ class Model {
 	public function match($array) {
 
 		if (!$this->tableExists()) {
-			return FALSE; 
+			return []; 
 		}
 
 		$db = $this->connectToDB();

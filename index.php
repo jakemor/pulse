@@ -13,6 +13,7 @@
 
 	require 'app/models.php';
 	require 'app/controllers.php';
+	// require 'app/helpers.php';
 
 	date_default_timezone_set($timezone); 
 
