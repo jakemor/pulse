@@ -75,11 +75,11 @@ class Model {
 
 			$cols = implode(' , ', $cols_array);
 
-			echo "INSERT INTO `" . $table_name . "` (`" . $cols . "`) VALUES (" . $vals . ")"; 
+			echo "INSERT INTO `" . $table_name . "` (" . $cols . ") VALUES (" . $vals . ")"; 
 			echo "\n";
 
 			$db->exec(
-				"INSERT INTO `" . $table_name . "` (`" . $cols . "`) VALUES (" . $vals . ")"
+				"INSERT INTO `" . $table_name . "` (" . $cols . ") VALUES (" . $vals . ")"
 	  		);
  
 
