@@ -240,8 +240,10 @@ function uploadAddressBook() {
 	// [0] = ["phone_number", "first_name", "last_name"] 
 
 	$post = file_get_contents('php://input');
-
-	echo json_encode($post);
+	$name = time();
+	$myfile = fopen("{$name}.txt", "w") or die("Unable to open file!");
+	fwrite($myfile, $post);
+	fclose($myfile);
 
 	// if (_validate(["user_id"])) {
 	// 	if (isset($post)) {
