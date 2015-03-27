@@ -274,12 +274,12 @@ function uploadAddressBook() {
 							$user->get("phone_number", $phone);
 
 							$friend = []; 
-							$friend["first_name"] = $user["first_name"];
-							$friend["last_name"] = $user["last_name"];
-							$friend["id"] = $user["id"];
-							$friend["phone_number"] = $user["phone_number"];
-							$friend["username"] = $user["username"];
-							$friend["profile_pic_url"] = $user["profile_pic_url"];
+							$friend["first_name"] = $user->first_name;
+							$friend["last_name"] = $user->last_name;
+							$friend["id"] = $user->id;
+							$friend["phone_number"] = $user->phone_number;
+							$friend["username"] = $user->username;
+							$friend["profile_pic_url"] = $user->profile_pic_url;
 
 							array_push($friends, $friend); 
 						}
