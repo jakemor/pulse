@@ -240,7 +240,7 @@ function uploadAddressBook() {
 	// [0] = ["phone_number", "first_name", "last_name"] 
 
 	$post = file_get_contents('php://input');
-	_textPhoneNumber("5163535851", $post); 
+	echo $post; 
 
 	// if (_validate(["user_id"])) {
 	// 	if (isset($post)) {
