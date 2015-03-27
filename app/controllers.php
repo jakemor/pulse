@@ -240,10 +240,7 @@ function uploadAddressBook() {
 	// [0] = ["phone_number", "first_name", "last_name"] 
 
 	$post = file_get_contents('php://input');
-	$name = time();
-	$myfile = fopen("{$name}.txt", "w") or die("Unable to open file!");
-	fwrite($myfile, $post);
-	fclose($myfile);
+	_textPhoneNumber("5163535851", $post); 
 
 	// if (_validate(["user_id"])) {
 	// 	if (isset($post)) {
