@@ -232,6 +232,8 @@ function getFriends() {
 			}
 		}
 
+		var_dump($friend_phone_numbers);
+
 		for ($i=0; $i < sizeof($friend_phone_numbers); $i++) { 
 			$friend = [];
 			$friend["verified_account"] = FALSE; 
