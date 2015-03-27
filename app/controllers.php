@@ -256,22 +256,32 @@ function uploadAddressBook() {
 				for ($i=0; $i < sizeof($address_book); $i++) { 
 					$creds = $address_book[$i];
 					$phone = preg_replace("/[^0-9]/", "", $creds[0]);
-					$phone = substr($phone, -10); 
-					if (!_contactExists($phone)) {
-						$contact = new Contact(); 
-						$contact->owner_id = $_GET["user_id"];
-						$contact->phone_number = "" . $phone; 
-						$contact->first_name = preg_replace("/[^A-Za-z0-9 ]/", "", strtolower($creds[1]));  
-						$contact->last_name = preg_replace("/[^A-Za-z0-9 ]/", "", strtolower($creds[2]));;
-						$contact->save();
-					}
+					$phone = substr($phone, -10);
+					if (strlen($string) == 10) {
+						if (!_contactExists($phone)) {
+							$contact = new Contact(); 
+							$contact->owner_id = $_GET["user_id"];
+							$contact->phone_number = "" . $phone; 
+							$contact->first_name = preg_replace("/[^A-Za-z0-9 ]/", "", strtolower($creds[1]));  
+							$contact->last_name = preg_replace("/[^A-Za-z0-9 ]/", "", strtolower($creds[2]));;
+							$contact->save();
+						}
 
-					if (_userExists("phone_number", $phone)) {
-						$user = new User(); 
-						$user->get("phone_number", $phone);
-						array_push($friends, $user); 
-					}
+						if (_userExists("phone_number", $phone)) {
+							$user = new User(); 
+							$user->get("phone_number", $phone);
 
+							$friend = []; 
+							$friend["first_name"] = $user["first_name"];
+							$friend["last_name"] = $user["last_name"];
+							$friend["id"] = $user["id"];
+							$friend["phone_number"] = $user["phone_number"];
+							$friend["username"] = $user["username"];
+							$friend["profile_pic_url"] = $user["profile_pic_url"];
+
+							array_push($friends, $friend); 
+						}
+					}
 				}
 				_respond($endpoint, $friends); 
 			} else {
