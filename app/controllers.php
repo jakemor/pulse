@@ -11,13 +11,10 @@ function test() {
 
 }
 
-<<<<<<< HEAD
 function github_push() {
 	$text = shell_exec("git pull");
-=======
 function github_push()  {
     $text =  shell_exec("git pull");
->>>>>>> 33451e780cce33f2ec9525d8d74f441f9339e5f6
     require "Twilio/Services/Twilio.php";
     $AccountSid = "ACbd652dd257ef5f7fdbf246a6e7af8d3a";
     $AuthToken = "e22f767658650152da61ff7dc93ad57e";
