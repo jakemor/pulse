@@ -58,7 +58,9 @@ function createUser() {
 				return;
 			}
 
-			$user->phone_number = $_GET["phone_number"];
+			$phone = preg_replace("/[^0-9]/", "", $_GET["phone_number"]);
+			$phone = substr($phone, -10);
+			$user->phone_number = $phone;
 			$user->first_name = ucfirst(strtolower($_GET["first_name"]));
 			$user->last_name = ucfirst(strtolower($_GET["last_name"]));
 			$user->username = strtolower($_GET["username"]);
