@@ -374,7 +374,6 @@ function getChirps() {
 		if (_userExists("phone_number", $_GET["phone_number"])) {
 			$pulse = new Pulse(); 
 			$all = $pulse->search("other_phone_number", $_GET["phone_number"]);
-			$all = array_reverse($all);
 			$all = array_slice($all, $_GET["start"], $_GET["length"]);
 
 			$return = []; 
