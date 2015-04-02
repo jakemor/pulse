@@ -22,7 +22,8 @@ function _chirpUser($owner_id, $other_phone_number, $message, $lat, $lon) {
 		_newNotification($owner_id, $other_id, 2, "You chirped @{$other_username}"); 
 		_newNotification($other_id, $owner_id, 1, "{$owner_username}");
 	} else {
-		$texted = _textPhoneNumber($other_phone_number, "Your friend {$owner_username} chirped at you! Download the app to chirp back at them. getchirp.com"); 
+		//$texted = _textPhoneNumber($other_phone_number, "Your friend {$owner_username} chirped at you! Download the app to chirp back at them. getchirp.com"); 
+		$texted = _textPhoneNumber($other_phone_number, "Your friend chirped at you! Download the app to chirp back at them. getchirp.com"); 
 		
 		if ($texted) {
 			_newNotification($owner_id, $other_phone_number, 2, "You chirped @{$other_phone_number}"); 
