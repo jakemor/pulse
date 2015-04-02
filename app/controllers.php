@@ -358,7 +358,8 @@ function getNotifications() {
 	if (_validate(["owner_id", "start", "length"])) {
 		if (_userExists("id", $_GET["owner_id"])) {
 			$notification = new Notification(); 
-			$return = $notification->search("owner_id", $_GET["owner_id"]); 
+			$return = $notification->search("owner_id", $_GET["owner_id"]);
+			$return = array_reverse($return);
 			$return = array_slice($return, $_GET["start"], $_GET["length"]);
 			_respond($endpoint, $return); 
 		} else {
