@@ -429,6 +429,7 @@ function getChirps() {
 				array_push($return, $pulse); 
 			}
 
+			print_r($return);
 
 			function cmp($a, $b) {
 			    if (intval($a["created_at"]) == intval($a["created_at"])) {
@@ -438,6 +439,8 @@ function getChirps() {
 			}
 
 			usort($return, "cmp"); 
+
+			print_r($return);
 
 			$return = array_slice($return, $_GET["start"], $_GET["length"]);
 			
