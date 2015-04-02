@@ -44,7 +44,7 @@ class Notification extends Model {
 	public $callback_url;
 }
 
-class Pulse extends Model {
+class Chirp extends Model {
 	public $owner_id; 
 	public $other_id;
 	public $other_phone_number;

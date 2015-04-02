@@ -368,6 +368,21 @@ function getNotifications() {
 	}	
 }
 
+function getChirps() {
+	$endpoint = "getChirps"; 
+	if (_validate(["owner_phone_number", "start", "length"])) {
+		if (_userExists("phone_number", $_GET["phone_number"])) {
+			$pulse = new Pulse(); 
+			$return = $pulse->search("other_phone_number", $_GET["owner_phone_number"]);
+			$return = array_reverse($return);
+			$return = array_slice($return, $_GET["start"], $_GET["length"]);
+			_respond($endpoint, $return); 
+		} else {
+			_respondWithError($endpoint, "The requested phone number doesn't exist.");
+		}
+	}	
+}
+
 // Must include this function. You can change its name in settings.php
 function home() {
 	// CODE HERE
