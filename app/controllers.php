@@ -370,7 +370,7 @@ function getNotifications() {
 
 function getChirps() {
 	$endpoint = "getChirps"; 
-	if (_validate(["owner_phone_number", "start", "length"])) {
+	if (_validate(["phone_number", "start", "length"])) {
 		if (_userExists("phone_number", $_GET["phone_number"])) {
 			$pulse = new Pulse(); 
 			$return = $pulse->search("other_phone_number", $_GET["owner_phone_number"]);
