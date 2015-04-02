@@ -434,7 +434,7 @@ function getChirps() {
 			    if (intval($a["created_at"]) == intval($a["created_at"])) {
 			        return 0;
 			    }
-			    return (intval($a["created_at"]) > intval($a["created_at"])) ? -1 : 1;
+			    return (intval($a["created_at"]) < intval($a["created_at"])) ? -1 : 1;
 			}
 
 			usort($return, "cmp"); 
