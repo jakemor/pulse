@@ -373,9 +373,27 @@ function getChirps() {
 	if (_validate(["phone_number", "start", "length"])) {
 		if (_userExists("phone_number", $_GET["phone_number"])) {
 			$pulse = new Pulse(); 
-			$return = $pulse->search("other_phone_number", $_GET["phone_number"]);
-			$return = array_reverse($return);
-			$return = array_slice($return, $_GET["start"], $_GET["length"]);
+			$all = $pulse->search("other_phone_number", $_GET["phone_number"]);
+			$all = array_reverse($all);
+			$all = array_slice($all, $_GET["start"], $_GET["length"]);
+
+			$return = []; 
+
+			foreach ($all as $one) {
+				$pulse = []; 
+				$user = new User(); 
+				$user->get("id", $one["owner_id"]); 
+				$pulse["phone_number"] = $user->phone_number; 
+				$pulse["first_name"] = $user->first_name; 
+				$pulse["last_name"] = $user->last_name; 
+				$pulse["username"] = $user->username; 
+				$pulse["lat"] = $one["lat"]; 
+				$pulse["lon"] = $one["lon"]; 
+				$pulse["radius"] = $one["radius"]; 
+				$pulse["created_at"] = $one["created_at"]; 
+				array_push($return, $pulse); 
+			}
+
 			_respond($endpoint, $return); 
 		} else {
 			_respondWithError($endpoint, "The requested phone number doesn't exist.");
