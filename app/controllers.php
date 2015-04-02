@@ -398,6 +398,7 @@ function getChirps() {
 			$user = new User(); 
 			$user->get("phone_number", $_GET["phone_number"]);
 
+			$pulse = new Pulse(); 
 			$all = $pulse->search("owner_id", $user->id);
 			$all = array_slice($all, $_GET["start"], $_GET["length"]);
 
