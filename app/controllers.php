@@ -434,12 +434,10 @@ function getChirps() {
 			echo("\n===========\n");
 
 			function cmp($a, $b) {
-				print_r($a);
-				print_r($b);
-			    if (intval($a["created_at"]) == intval($a["created_at"])) {
+			    if (intval($a["created_at"]) == intval($b["created_at"])) {
 			        return 0;
 			    }
-			    return (intval($a["created_at"]) > intval($a["created_at"])) ? -1 : 1;
+			    return (intval($a["created_at"]) > intval($b["created_at"])) ? -1 : 1;
 			}
 
 			usort($return, "cmp"); 
