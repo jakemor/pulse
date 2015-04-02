@@ -4,7 +4,7 @@
 	HELPER FUNCTIONS - Add as you need
 */
 
-function _pulseUser($owner_id, $other_phone_number, $message, $lat, $lon) {
+function _chirpUser($owner_id, $other_phone_number, $message, $lat, $lon) {
 	
 	$owner_username = _getUserDisplayName($owner_id); 
 	$pulse = new Pulse(); 
