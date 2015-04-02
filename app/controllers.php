@@ -428,11 +428,7 @@ function getChirps() {
 
 				array_push($return, $pulse); 
 			}
-
-			echo("\nUNSORTED\n");
-			print_r($return);
-			echo("\n===========\n");
-
+			
 			function cmp($a, $b) {
 			    if (intval($a["created_at"]) == intval($b["created_at"])) {
 			        return 0;
@@ -441,10 +437,6 @@ function getChirps() {
 			}
 
 			usort($return, "cmp"); 
-
-			echo("\nSORTED \n");
-			print_r($return);
-			echo("\n=========== \n");
 
 			$return = array_slice($return, $_GET["start"], $_GET["length"]);
 			
