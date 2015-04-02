@@ -428,12 +428,12 @@ function getChirps() {
 
 				array_push($return, $pulse); 
 			}
-			
+
 			function cmp($a, $b) {
 			    if (intval($a["created_at"]) == intval($b["created_at"])) {
 			        return 0;
 			    }
-			    return (intval($a["created_at"]) > intval($b["created_at"])) ? -1 : 1;
+			    return (intval($a["created_at"]) < intval($b["created_at"])) ? -1 : 1;
 			}
 
 			usort($return, "cmp"); 
