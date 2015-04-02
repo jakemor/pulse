@@ -404,7 +404,7 @@ function getChirps() {
 			foreach ($all as $one) {
 				$pulse = []; 
 
-				if (_userExists("phone_number", $one["other_phone_number"]) {
+				if (_userExists("phone_number", $one["other_phone_number"])) {
 					$user = new User(); 
 					$user->get("phone_number", $one["other_phone_number"]); 
 					$pulse["type"] = "sent";
