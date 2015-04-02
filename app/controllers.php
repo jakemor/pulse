@@ -372,6 +372,7 @@ function getChirps() {
 	$endpoint = "getChirps"; 
 	if (_validate(["phone_number", "start", "length"])) {
 		if (_userExists("phone_number", $_GET["phone_number"])) {
+			
 			$pulse = new Pulse(); 
 			$all = $pulse->search("other_phone_number", $_GET["phone_number"]);
 			$all = array_slice($all, $_GET["start"], $_GET["length"]);
@@ -382,7 +383,8 @@ function getChirps() {
 				$pulse = []; 
 				$user = new User(); 
 				$user->get("id", $one["owner_id"]); 
-				$pulse["phone_number"] = $user->phone_number; 
+				$pulse["phone_number"] = $user->phone_number;
+				$pulse["type"] = "received";
 				$pulse["first_name"] = $user->first_name; 
 				$pulse["last_name"] = $user->last_name; 
 				$pulse["username"] = $user->username; 
@@ -393,7 +395,53 @@ function getChirps() {
 				array_push($return, $pulse); 
 			}
 
-			_respond($endpoint, $return); 
+			$user = new User(); 
+			$user->get("phone_number", $_GET["phone_number"]);
+
+			$all = $pulse->search("owner_id", $user->id);
+			$all = array_slice($all, $_GET["start"], $_GET["length"]);
+
+			foreach ($all as $one) {
+				$pulse = []; 
+
+				if (_userExists("phone_number", $one["other_phone_number"]) {
+					$user = new User(); 
+					$user->get("phone_number", $one["other_phone_number"]); 
+					$pulse["type"] = "sent";
+					$pulse["phone_number"] = $user->phone_number; 
+					$pulse["first_name"] = $user->first_name; 
+					$pulse["last_name"] = $user->last_name; 
+					$pulse["username"] = $user->username; 
+				} else {
+					$pulse["type"] = "sent";
+					$pulse["phone_number"] = $one["other_phone_number"]; 
+					$pulse["first_name"] = $one["other_phone_number"]; 
+					$pulse["last_name"] = ""; 
+					$pulse["username"] = $one["other_phone_number"]; 
+				}
+
+					$pulse["lat"] = $one["lat"]; 
+					$pulse["lon"] = $one["lon"]; 
+					$pulse["radius"] = $one["radius"]; 
+					$pulse["created_at"] = $one["created_at"]; 
+
+				array_push($return, $pulse); 
+			}
+
+
+			function cmp($a, $b) {
+			    if (intval($a["created_at"]) == intval($a["created_at"])) {
+			        return 0;
+			    }
+			    return (intval($a["created_at"]) < intval($a["created_at"])) ? -1 : 1;
+			}
+
+			usort($return, "cmp"); 
+
+			$return = array_slice($return, $_GET["start"], $_GET["length"]);
+			
+			_respond($endpoint, $return);
+
 		} else {
 			_respondWithError($endpoint, "The requested phone number doesn't exist.");
 		}
