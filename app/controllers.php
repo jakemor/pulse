@@ -37,7 +37,7 @@ function verifyPhone() {
 		    $sms = $client->account->messages->sendMessage(
 		        "516-210-4617", 
 		        $_GET["phone_number"],
-		        "Hey! Here's your Pulse pin: {$random}. Happy Pulsing :)"
+		        "Hey! Here's your Chirp code: {$random}. Happy Pulsing :)"
 		    );
 		    _respond($endpoint, $random); 
 		} else {
@@ -79,7 +79,7 @@ function logIn() {
 		if (_userExists("phone_number", $_GET["phone_number"])) {
 			_respond($endpoint, _getUser("phone_number", $_GET["phone_number"]));
 		} else {
-			_respondWithMessage($endpoint, null, "Seems like you're a new user, welcome to Pulse!");
+			_respondWithMessage($endpoint, null, "Seems like you're a new user, welcome to Chirp!");
 		}
 	}
 }
@@ -90,7 +90,7 @@ function getUser() {
 		if (_userExists("phone_number", $_GET["phone_number"])) {
 			_respond($endpoint, _getUser("phone_number", $_GET["phone_number"]));
 		} else {
-			_respondWithError($endpoint, "This person hasn't downloaded Pulse yet. You should invite them!");
+			_respondWithError($endpoint, "This person hasn't downloaded Chirp yet. You should invite them!");
 		}
 	}
 }
@@ -149,7 +149,7 @@ function addFriend() {
 
 				if (!_userExists("phone_number", $_GET["friend_phone_number"])) {
 					$phone = $_GET["friend_phone_number"]; 
-					$texted = _textPhoneNumber($phone, "{$username} added you on Pulse! Download it here to pulse them back. getpulse.com");
+					$texted = _textPhoneNumber($phone, "{$username} added you on Chirp! Download it here to Chirp back at them. getchirp.com");
 					if ($texted) {
 						_newNotification($user->id, $_GET["friend_phone_number"], 3, "You added {$phone}!");
 						_respondWithMessage($endpoint, $friend, "You added {$phone}!");
@@ -248,11 +248,11 @@ function getFriends() {
 	}
 }
 
-function pulseUser() {
-	$endpoint = "pulseUser"; 
+function chirpUser() {
+	$endpoint = "chirpUser"; 
  	if (_validate(["sender_id", "phone_number", "lat", "lon"])) {
 		if (_userExists("id", $_GET["sender_id"])) {
-			_pulseUser($_GET["sender_id"], $_GET["phone_number"], "", $_GET["lat"], $_GET["lon"]); 
+			_chirpUser($_GET["sender_id"], $_GET["phone_number"], "", $_GET["lat"], $_GET["lon"]); 
 		} else {
 			_respondWithError($endpoint, "sender_id is invalid.");
 		}
@@ -351,6 +351,20 @@ function getFriends2() {
 			}
 		}
 	}
+}
+
+function getNotifications() {
+	$endpoint = "getNotifications"; 
+	if (_validate(["owner_id", "start", "length"])) {
+		if (_userExists("id", $_GET["owner_id"])) {
+			$notification = new Notification(); 
+			$return = $notification->search("owner_id", $_GET["owner_id"]); 
+			$return = array_slice($return, $_GET["start"], $_GET["length"]);
+			_respond($endpoint, $return); 
+		} else {
+			_respondWithError($endpoint, "The requested user_id doesn't exist.");
+		}
+	}	
 }
 
 // Must include this function. You can change its name in settings.php
