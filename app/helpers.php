@@ -19,15 +19,15 @@ function _pulseUser($owner_id, $other_phone_number, $message, $lat, $lon) {
 		$other_id = _getUser("phone_number", $other_phone_number)->id;
 		$pulse->other_id = $other_id; 
 		$other_username = _getUserDisplayName($other_id); 
-		_newNotification($owner_id, $other_id, 2, "You pulsed {$other_username}."); 
-		_newNotification($other_id, $owner_id, 1, "{$owner_username} sent you a pulse!");
+		_newNotification($owner_id, $other_id, 2, "You chirped @{$other_username}"); 
+		_newNotification($other_id, $owner_id, 1, "{$owner_username}");
 	} else {
-		$texted = _textPhoneNumber($other_phone_number, "Your friend {$owner_username} sent you a pulse! Download the app to pulse him back. getpulse.com"); 
+		$texted = _textPhoneNumber($other_phone_number, "Your friend {$owner_username} chirped at you! Download the app to chirp back at them. getchirp.com"); 
 		
 		if ($texted) {
-			_newNotification($owner_id, $other_phone_number, 2, "You pulsed {$other_phone_number}."); 
+			_newNotification($owner_id, $other_phone_number, 2, "You chirped @{$other_phone_number}"); 
 		} else {
-			_newNotification($owner_id, $other_phone_number, 2, "{$other_phone_number} is not a valid phone number.");
+			_newNotification($owner_id, $other_phone_number, 2, "{$other_phone_number} is not a valid phone number");
 		}
 	}
 

@@ -151,16 +151,16 @@ function addFriend() {
 					$phone = $_GET["friend_phone_number"]; 
 					$texted = _textPhoneNumber($phone, "{$username} added you on Chirp! Download it here to Chirp back at them. getchirp.com");
 					if ($texted) {
-						_newNotification($user->id, $_GET["friend_phone_number"], 3, "You added {$phone}!");
+						_newNotification($user->id, $_GET["friend_phone_number"], 3, "You added {$phone}");
 						_respondWithMessage($endpoint, $friend, "You added {$phone}!");
 					} else {
-						_newNotification($user->id, $_GET["friend_phone_number"], 3, "{$phone} is not a valid phone number!");
+						_newNotification($user->id, $_GET["friend_phone_number"], 3, "{$phone} is not a valid phone number");
 						_respondWithMessage($endpoint, $friend, "{$phone} is not a valid phone number!");
 					}
 				} else {
 					$the_friend = _getUser("phone_number", $_GET["friend_phone_number"]);
-					_newNotification($the_friend->id, $user->phone_number, 4, "{$username} added you!");
-					_newNotification($user->id, $the_friend->phone_number, 3, "You added {$the_friend->username}!");
+					_newNotification($the_friend->id, $user->phone_number, 4, "{$username} added you");
+					_newNotification($user->id, $the_friend->phone_number, 3, "You added {$the_friend->username}");
 					_respondWithMessage($endpoint, $friend, "You added {$the_friend->username}!");
 				}
 
