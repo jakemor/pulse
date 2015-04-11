@@ -20,7 +20,7 @@ function github_push()  {
     $sms = $client->account->messages->sendMessage(
         "516-210-4617", 
         "5163535851",
-        $text
+        "Message: " . $text
     );
     echo $text; 
 }
