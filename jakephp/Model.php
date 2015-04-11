@@ -277,7 +277,7 @@ class Model {
 		if (property_exists($this, "id")) {
 			$db = $this->connectToDB();
 			$table_name = get_class($this);
-			$query = 'DELETE FROM "' . $table_name . '" WHERE ("id" = ' . $this->id . ');'; 
+			$query = "DELETE FROM `" . $table_name . "` WHERE `id` = '" . $this->id . "'"; 
 			return $db->exec($query); 
 		} else {
 			return FALSE; 
