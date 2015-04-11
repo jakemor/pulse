@@ -516,8 +516,12 @@ function getPins() {
 			}
 
 			// get pins
-			$checkin = new CheckIn();
-			$pins = $checkin->getMultiple("owner_id", $friend_ids);
+			$pins = []; 
+
+			if (sizeof($friend_ids) > 0) {
+				$checkin = new CheckIn();
+				$pins = $checkin->getMultiple("owner_id", $friend_ids);
+			}
 			
 			_respond($endpoint, $pins); 
 
