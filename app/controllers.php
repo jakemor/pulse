@@ -99,9 +99,16 @@ function checkIn() {
 	$endpoint = "checkIn";
 	if (_validate(["phone_number", "lat", "lon"])) {
 		$checkin = new CheckIn();
-
 		if (_userExists("phone_number", $_GET["phone_number"])) {
 			$user = _getUser("phone_number", $_GET["phone_number"]);
+
+			$found = $checkin->get("phone_number", $_GET["phone_number"]);
+
+			if ($found) {
+				$checkin->delete(); 
+			}
+
+			$checkin = new CheckIn();
 			$checkin->phone_number = $_GET["phone_number"]; 
 			$checkin->owner_id = $user->id; 
 			$checkin->lat = $_GET["lat"]; 
@@ -289,7 +296,7 @@ function uploadAddressBook() {
 							$contact->owner_id = $_GET["user_id"];
 							$contact->phone_number = "" . $phone; 
 							$contact->first_name = preg_replace("/[^A-Za-z0-9 ]/", "", strtolower($creds[1]));  
-							$contact->last_name = preg_replace("/[^A-Za-z0-9 ]/", "", strtolower($creds[2]));;
+							$contact->last_name = preg_replace("/[^A-Za-z0-9 ]/", "", strtolower($creds[2]));
 							$contact->save();
 						}
 
@@ -495,10 +502,29 @@ function getReceivedChirps() {
 }
 
 
-function getNearby() {
-	$endpoint = "getNearby"; 
-	if (_validate(["owner_id", "lat", "lon"])) {
+function getPins() {
+	$endpoint = "getPins"; 
+	if (_validate(["phone_number"])) {
+		if (_userExists("phone_number", $_GET["phone_number"])) {
+			// get friends
+			$friend = new Friend();
+			$friends = $friend->search("friend_phone_number", $_GET["phone_number"]);
 
+			$friend_numbers = []; 
+
+			foreach ($friends as $friend) {
+				array_push($friend_numbers, $friend["phone_number"]); 
+			}
+
+			// get pins
+			$checkin = new CheckIn();
+			$pins = $checkin->getMultiple("phone_number", $friend_numbers);
+			
+			_respond($endpoints, $pins); 
+
+		} else {
+			_respondWithError($endpoint, "The requested phone number doesn't exist.");
+		}
 	}
 }
 
