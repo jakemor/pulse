@@ -8,7 +8,7 @@ include "helpers.php";
 
 
 function test() {
-	echo "the update worked (again)";
+	echo "the update worked";
 }
 
 function github_push()  {
