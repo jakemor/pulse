@@ -512,7 +512,6 @@ function getPins() {
 			$friend_ids = []; 
 
 			foreach ($friends as $friend) {
-				print_r($friend);
 				array_push($friend_ids, $friend["owner_id"]); 
 			}
 
