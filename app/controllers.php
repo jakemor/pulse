@@ -107,6 +107,7 @@ function checkIn() {
 			$checkin->lat = $_GET["lat"]; 
 			$checkin->lon = $_GET["lon"]; 
 			$checkin->save(); 
+			_respond($endpoint, "Checked In"); 
 		}
 	}
 }
