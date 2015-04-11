@@ -501,7 +501,6 @@ function getReceivedChirps() {
 	}	
 }
 
-
 function getPins() {
 	$endpoint = "getPins"; 
 	if (_validate(["phone_number"])) {
@@ -510,15 +509,16 @@ function getPins() {
 			$friend = new Friend();
 			$friends = $friend->search("friend_phone_number", $_GET["phone_number"]);
 
-			$friend_numbers = []; 
+			$friend_ids = []; 
 
-			foreach ($friends as $one) {
-				array_push($friend_numbers, $one["phone_number"]); 
+			foreach ($friends as $friend) {
+				print_r($friend);
+				array_push($friend_ids, $friend["owner_id"]); 
 			}
 
 			// get pins
 			$checkin = new CheckIn();
-			$pins = $checkin->getMultiple("phone_number", $friend_numbers);
+			$pins = $checkin->getMultiple("owner_id", $friend_ids);
 			
 			_respond($endpoint, $pins); 
 
