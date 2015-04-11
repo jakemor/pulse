@@ -512,15 +512,15 @@ function getPins() {
 
 			$friend_numbers = []; 
 
-			foreach ($friends as $friend) {
-				array_push($friend_numbers, $friend["phone_number"]); 
+			foreach ($friends as $one) {
+				array_push($friend_numbers, $one["phone_number"]); 
 			}
 
 			// get pins
 			$checkin = new CheckIn();
 			$pins = $checkin->getMultiple("phone_number", $friend_numbers);
 			
-			_respond($endpoints, $pins); 
+			_respond($endpoint, $pins); 
 
 		} else {
 			_respondWithError($endpoint, "The requested phone number doesn't exist.");
